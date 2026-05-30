@@ -1,5 +1,5 @@
 # ─────────────────────────────────────────────────────────────────────────────
-# Data Sources — discover existing AWS infrastructure
+# Data Sources - discover existing AWS infrastructure
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Read the default VPC so we can reference its ID throughout the config.
@@ -31,7 +31,7 @@ locals {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Security Group — WordPress EC2 (web tier)
+# Security Group - WordPress EC2 (web tier)
 # Allows: HTTP/80 from internet, optional SSH/22 from internet
 # ─────────────────────────────────────────────────────────────────────────────
 resource "aws_security_group" "wordpress" {
@@ -69,8 +69,8 @@ resource "aws_security_group" "wordpress" {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# Security Group — RDS MySQL (database tier)
-# Allows: TCP/3306 ONLY from the WordPress EC2 security group — never from 0.0.0.0/0
+# Security Group - RDS MySQL (database tier)
+# Allows: TCP/3306 ONLY from the WordPress EC2 security group - never from 0.0.0.0/0
 # ─────────────────────────────────────────────────────────────────────────────
 resource "aws_security_group" "rds" {
   name        = "${var.name_prefix}-rds-sg"
@@ -78,7 +78,7 @@ resource "aws_security_group" "rds" {
   vpc_id      = data.aws_vpc.default.id
 
   ingress {
-    description     = "Allow MySQL from the WordPress EC2 SG only — no public access"
+    description     = "Allow MySQL from the WordPress EC2 SG only - no public access"
     from_port       = 3306
     to_port         = 3306
     protocol        = "tcp"
@@ -99,7 +99,7 @@ resource "aws_security_group" "rds" {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# DB Subnet Group — required by RDS even in the default VPC
+# DB Subnet Group - required by RDS even in the default VPC
 # Uses all available subnets for AZ coverage
 # ─────────────────────────────────────────────────────────────────────────────
 resource "aws_db_subnet_group" "wordpress" {
@@ -113,8 +113,8 @@ resource "aws_db_subnet_group" "wordpress" {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# RDS MySQL Instance — private, managed database tier
-# CRITICAL: publicly_accessible = false — never change this
+# RDS MySQL Instance - private, managed database tier
+# CRITICAL: publicly_accessible = false - never change this
 # ─────────────────────────────────────────────────────────────────────────────
 resource "aws_db_instance" "wordpress" {
   identifier        = "${var.name_prefix}-rds"
@@ -143,7 +143,7 @@ resource "aws_db_instance" "wordpress" {
 }
 
 # ─────────────────────────────────────────────────────────────────────────────
-# EC2 Instance — WordPress web tier
+# EC2 Instance - WordPress web tier
 # Bootstrapped via user_data: installs Apache, PHP, WordPress, connects to RDS
 # ─────────────────────────────────────────────────────────────────────────────
 resource "aws_instance" "wordpress" {
@@ -163,7 +163,7 @@ resource "aws_instance" "wordpress" {
     name_prefix = var.name_prefix
   })
 
-  # No IAM instance profile needed — MySQL password auth is used, not IAM DB auth
+  # No IAM instance profile needed - MySQL password auth is used, not IAM DB auth
   # iam_instance_profile = ""  # intentionally empty
 
   key_name = var.key_name != "" ? var.key_name : null

@@ -1,0 +1,12 @@
+Student: 이하현
+Student Number: 32213651
+Date: 2026-05-30
+
+All labs completed:
+- terraform-01-ec2-webserver     ✅
+- terraform-02-ec2-two-subnets   ✅
+- terraform-03-alb-two-ec2       ✅
+- terraform-04-wp-ec2-rds        ✅
+
+All commands.md and report.md submitted.
+terraform destroy confirmed on all labs.
